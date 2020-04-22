@@ -18,14 +18,26 @@ func NewGame() *Game {
 
 func (g *Game) Init() {
 	g.Bird = NewBird(birdSize*2, Height/2)
-	g.Pipes = make([]*Pipe, 50)
+	g.Pipes = make([]*Pipe, 100)
 
-	initialOffset := horizontalGap + birdSize*2
+	initialOffset := horizontalGap + birdSize*2*2
 	offset := initialOffset
 	for i := range g.Pipes {
 		g.Pipes[i] = NewPipe((i)*pipeWidth+offset, 0)
 		offset = horizontalGap*(i+1) + initialOffset
 	}
+}
+
+func (g *Game) Update() {
+	if rl.IsKeyReleased(rl.KeySpace) {
+		g.Bird.Jump()
+	}
+
+	for i := range g.Pipes {
+		g.Pipes[i].X -= speed
+	}
+
+	g.Bird.Update()
 }
 
 func (g *Game) Draw() {

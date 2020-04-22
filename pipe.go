@@ -10,8 +10,9 @@ type Pipe struct {
 const (
 	pipeWidth     = 70
 	pipeHeight    = Height / 2
-	verticalGap   = 100
-	horizontalGap = 150
+	verticalGap   = 120
+	horizontalGap = 230
+	speed         = 2.3
 )
 
 func NewPipe(x, y int) *Pipe {
