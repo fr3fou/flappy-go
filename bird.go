@@ -5,14 +5,12 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 // Bird is a bird
 type Bird struct {
 	rl.Rectangle
-	Pos rl.Vector2
 }
 
-const birdSize = 50
+const birdSize = 30
 
-func NewBird(x, y float32) *Bird {
+func NewBird(x, y int) *Bird {
 	return &Bird{
-		Pos:       rl.NewVector2(x, y),
-		Rectangle: rl.NewRectangle(x, y, 50, 50),
+		Rectangle: rl.NewRectangle(float32(x), float32(y), birdSize, birdSize),
 	}
 }

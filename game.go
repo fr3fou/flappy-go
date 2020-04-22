@@ -1,6 +1,8 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 // Game is a game
 type Game struct {
@@ -15,19 +17,25 @@ func NewGame() *Game {
 }
 
 func (g *Game) Init() {
-	g.Bird = NewBird(Width/2, Height/2)
-	g.Pipes = make([]*Pipe, 100)
+	g.Bird = NewBird(Width/2-birdSize*2, Height/2)
+	g.Pipes = make([]*Pipe, 50)
 
 	for i := range g.Pipes {
-		g.Pipes[i] = NewPipe(float32(i)*pipeWidth, 0)
+		g.Pipes[i] = NewPipe((i)*pipeWidth+100*(i+1), 0)
 	}
 }
 
-func (g *Game) Update() {
+func (g *Game) Draw() {
+	rl.BeginDrawing()
+	rl.ClearBackground(rl.SkyBlue)
+
 	b := g.Bird.ToInt32()
 	rl.DrawRectangle(b.X, b.Y, b.Width, b.Height, rl.Yellow)
+
 	for _, pipe := range g.Pipes {
 		p := pipe.ToInt32()
 		rl.DrawRectangle(p.X, p.Y, p.Width, p.Height, rl.Lime)
 	}
+
+	rl.EndDrawing()
 }

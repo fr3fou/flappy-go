@@ -5,18 +5,16 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 // Pipe is a pipe
 type Pipe struct {
 	rl.Rectangle
-	Pos rl.Vector2
 }
 
 const (
-	pipeWidth  = 100
-	pipeHeight = Height / 2
+	pipeWidth      = 70
+	basePipeHeight = Height/2 - 10
 )
 
-func NewPipe(x, y float32) *Pipe {
+func NewPipe(x, y int) *Pipe {
 
 	return &Pipe{
-		Pos:       rl.NewVector2(x, y),
-		Rectangle: rl.NewRectangle(x, y, pipeWidth, pipeHeight),
+		Rectangle: rl.NewRectangle(float32(x), float32(y), pipeWidth, float32(basePipeHeight-rl.GetRandomValue(0, 100))),
 	}
 }

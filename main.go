@@ -12,6 +12,6 @@ func main() {
 	g := NewGame()
 
 	for !rl.WindowShouldClose() {
-		g.Update()
+		g.Draw()
 	}
 }
