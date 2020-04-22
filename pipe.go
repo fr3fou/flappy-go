@@ -30,10 +30,16 @@ func (pipe *Pipe) Draw() {
 	// Top Pipe Border
 	rl.DrawRectangle(p.X-4, p.Y, p.Width+8, p.Height+4, rl.DarkGreen)
 	// Top Pipe
-	rl.DrawRectangle(p.X, p.Y, p.Width, p.Height, rl.Lime)
+	gTop := pipe.Rectangle
+	rl.DrawRectangleGradientEx(gTop, rl.Lime, rl.Lime, rl.Green, rl.Green)
 
 	// Bottom Pipe Border
 	rl.DrawRectangle(p.X-4, p.Y+verticalGap+p.Height-4, p.Width+8, Height-p.Height+4, rl.DarkGreen)
 	// Bottom Pipe
-	rl.DrawRectangle(p.X, p.Y+verticalGap+p.Height, p.Width, Height-p.Height, rl.Lime)
+	gBottom := rl.NewRectangle(
+		pipe.X, float32(pipe.Y+verticalGap+pipe.Height),
+		pipe.Width, float32(Height-p.Height),
+	)
+	rl.DrawRectangleGradientEx(gBottom, rl.Lime, rl.Lime, rl.Green, rl.Green)
+
 }
