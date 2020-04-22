@@ -17,11 +17,14 @@ func NewGame() *Game {
 }
 
 func (g *Game) Init() {
-	g.Bird = NewBird(Width/2-birdSize*2, Height/2)
+	g.Bird = NewBird(birdSize*2, Height/2)
 	g.Pipes = make([]*Pipe, 50)
 
+	initialOffset := horizontalGap + birdSize*2
+	offset := initialOffset
 	for i := range g.Pipes {
-		g.Pipes[i] = NewPipe((i)*pipeWidth+100*(i+1), 0)
+		g.Pipes[i] = NewPipe((i)*pipeWidth+offset, 0)
+		offset = horizontalGap*(i+1) + initialOffset
 	}
 }
 
@@ -35,7 +38,7 @@ func (g *Game) Draw() {
 	for _, pipe := range g.Pipes {
 		p := pipe.ToInt32()
 		rl.DrawRectangle(p.X, p.Y, p.Width, p.Height, rl.Lime)
-		rl.DrawRectangle(p.X, p.Y+pipeGap+p.Height, p.Width, Height-p.Height, rl.Lime)
+		rl.DrawRectangle(p.X, p.Y+verticalGap+p.Height, p.Width, Height-p.Height, rl.Lime)
 	}
 
 	rl.EndDrawing()
