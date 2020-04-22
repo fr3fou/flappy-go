@@ -26,9 +26,9 @@ func NewPipe(x, y int) *Pipe {
 
 func (pipe *Pipe) Draw() {
 	p := pipe.ToInt32()
+
 	// Top Pipe Border
 	rl.DrawRectangle(p.X-4, p.Y, p.Width+8, p.Height+4, rl.DarkGreen)
-
 	// Top Pipe
 	rl.DrawRectangle(p.X, p.Y, p.Width, p.Height, rl.Lime)
 
