@@ -35,6 +35,7 @@ func (g *Game) Draw() {
 	for _, pipe := range g.Pipes {
 		p := pipe.ToInt32()
 		rl.DrawRectangle(p.X, p.Y, p.Width, p.Height, rl.Lime)
+		rl.DrawRectangle(p.X, p.Y+pipeGap+p.Height, p.Width, Height-p.Height, rl.Lime)
 	}
 
 	rl.EndDrawing()

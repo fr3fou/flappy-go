@@ -3,7 +3,7 @@ package main
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 const (
-	Width  = 250
+	Width  = 750
 	Height = 750
 )
 
