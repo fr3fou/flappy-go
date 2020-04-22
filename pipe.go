@@ -10,6 +10,7 @@ type Pipe struct {
 const (
 	pipeWidth     = 70
 	pipeHeight    = Height / 2
+	pipeBorder    = 2
 	verticalGap   = 120
 	horizontalGap = 230
 	speed         = 2.3
@@ -28,18 +29,23 @@ func (pipe *Pipe) Draw() {
 	p := pipe.ToInt32()
 
 	// Top Pipe Border
-	rl.DrawRectangle(p.X-4, p.Y, p.Width+8, p.Height+4, rl.DarkGreen)
+	rl.DrawRectangle(p.X-pipeBorder, p.Y,
+		p.Width+pipeBorder*2, p.Height+pipeBorder,
+		rl.DarkGray,
+	)
 	// Top Pipe
 	gTop := pipe.Rectangle
 	rl.DrawRectangleGradientEx(gTop, rl.Lime, rl.Lime, rl.Green, rl.Green)
 
 	// Bottom Pipe Border
-	rl.DrawRectangle(p.X-4, p.Y+verticalGap+p.Height-4, p.Width+8, Height-p.Height+4, rl.DarkGreen)
+	rl.DrawRectangle(p.X-pipeBorder, p.Y+verticalGap+p.Height-pipeBorder,
+		p.Width+pipeBorder*2, Height-p.Height+pipeBorder,
+		rl.DarkGray,
+	)
 	// Bottom Pipe
 	gBottom := rl.NewRectangle(
 		pipe.X, float32(pipe.Y+verticalGap+pipe.Height),
 		pipe.Width, float32(Height-p.Height),
 	)
 	rl.DrawRectangleGradientEx(gBottom, rl.Lime, rl.Lime, rl.Green, rl.Green)
-
 }

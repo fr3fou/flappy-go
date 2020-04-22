@@ -6,8 +6,9 @@ import (
 
 // Game is a game
 type Game struct {
-	Bird  *Bird
-	Pipes []*Pipe
+	Bird   *Bird
+	Ground *Ground
+	Pipes  []*Pipe
 }
 
 func NewGame() *Game {
@@ -17,9 +18,10 @@ func NewGame() *Game {
 }
 
 func (g *Game) Init() {
+	g.Ground = NewGround()
 	g.Bird = NewBird(birdSize*2, Height/2)
-	g.Pipes = make([]*Pipe, 100)
 
+	g.Pipes = make([]*Pipe, 100)
 	initialOffset := horizontalGap + birdSize*2*2
 	offset := initialOffset
 	for i := range g.Pipes {
@@ -49,6 +51,8 @@ func (g *Game) Draw() {
 	for _, pipe := range g.Pipes {
 		pipe.Draw()
 	}
+
+	g.Ground.Draw()
 
 	rl.EndDrawing()
 }
