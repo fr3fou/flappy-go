@@ -22,8 +22,7 @@ func NewBird(x, y int) *Bird {
 }
 
 func (bird *Bird) Draw() {
-	b := bird.ToInt32()
-	rl.DrawRectangle(b.X, b.Y, b.Width, b.Height, rl.Yellow)
+	rl.DrawRectangleRec(bird.Rectangle, rl.Yellow)
 }
 
 func (b *Bird) Update() {

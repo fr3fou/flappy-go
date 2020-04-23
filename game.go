@@ -8,6 +8,7 @@ import (
 type Game struct {
 	Bird   *Bird
 	Ground *Ground
+	Over   bool
 	Pipes  []*Pipe
 }
 
@@ -31,11 +32,18 @@ func (g *Game) Init() {
 }
 
 func (g *Game) Update() {
+	if g.Over {
+		return
+	}
 	if rl.IsKeyReleased(rl.KeySpace) {
 		g.Bird.Jump()
 	}
 
 	for i := range g.Pipes {
+		if rl.CheckCollisionRecs(g.Bird.Rectangle, g.Pipes[i].Rectangle) {
+			g.Over = true
+			break
+		}
 		g.Pipes[i].X -= speed
 	}
 
@@ -53,6 +61,10 @@ func (g *Game) Draw() {
 	}
 
 	g.Ground.Draw()
+
+	if g.Over {
+		rl.DrawText("GAME OVER!", Width/2-55*2, Height/2-55, 55, rl.White)
+	}
 
 	rl.EndDrawing()
 }
