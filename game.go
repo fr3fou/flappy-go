@@ -41,14 +41,14 @@ func (g *Game) Update() {
 	}
 
 	for i := range g.Pipes {
-		if rl.CheckCollisionRecs(g.Bird.Rectangle, g.Pipes[i].Rectangle) {
+		if g.Pipes[i].CollidesWith(g.Bird.Rectangle) {
 			g.Over = true
 			break
 		}
 		g.Pipes[i].X -= speed
 	}
 
-	if rl.CheckCollisionRecs(g.Bird.Rectangle, g.Ground.Rectangle) {
+	if g.Ground.CollidesWith(g.Bird.Rectangle) {
 		g.Over = true
 		return
 	}

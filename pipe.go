@@ -1,6 +1,8 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 // Pipe is a pipe
 type Pipe struct {
@@ -53,4 +55,18 @@ func (pipe *Pipe) Draw() {
 		pipe.Width+pipeBorder*2, Height-pipe.Height+pipeBorder,
 	)
 	rl.DrawRectangleLinesEx(bBottom, pipeBorder, rl.DarkGray)
+}
+
+func (p *Pipe) CollidesWith(other rl.Rectangle) bool {
+	top := rl.NewRectangle(
+		p.X-pipeBorder, p.Y-pipeBorder,
+		p.Width+pipeBorder*2, p.Height+pipeBorder,
+	)
+
+	bottom := rl.NewRectangle(
+		p.X-pipeBorder, p.Y+verticalGap+p.Height-pipeBorder,
+		p.Width+pipeBorder*2, Height-p.Height+pipeBorder,
+	)
+
+	return rl.CheckCollisionRecs(top, other) || rl.CheckCollisionRecs(bottom, other)
 }

@@ -28,3 +28,7 @@ func (ground *Ground) Draw() {
 	// Grass
 	rl.DrawRectangle(g.X, g.Y, Width, grassHeight, rl.DarkGreen)
 }
+
+func (ground *Ground) CollidesWith(other rl.Rectangle) bool {
+	return rl.CheckCollisionRecs(ground.Rectangle, other)
+}
