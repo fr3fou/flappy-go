@@ -35,6 +35,7 @@ func (g *Game) Update() {
 	if g.Over {
 		return
 	}
+
 	if rl.IsKeyReleased(rl.KeySpace) {
 		g.Bird.Jump()
 	}
@@ -45,6 +46,11 @@ func (g *Game) Update() {
 			break
 		}
 		g.Pipes[i].X -= speed
+	}
+
+	if rl.CheckCollisionRecs(g.Bird.Rectangle, g.Ground.Rectangle) {
+		g.Over = true
+		return
 	}
 
 	g.Bird.Update()
@@ -63,7 +69,7 @@ func (g *Game) Draw() {
 	g.Ground.Draw()
 
 	if g.Over {
-		rl.DrawText("GAME OVER!", Width/2-55*2, Height/2-55, 55, rl.White)
+		rl.DrawText("GAME OVER!", Width/2-150, Height/2-55, 55, rl.White)
 	}
 
 	rl.EndDrawing()
