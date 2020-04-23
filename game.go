@@ -24,7 +24,8 @@ func NewGame() *Game {
 func (g *Game) Init() {
 	g.Ground = NewGround()
 	g.Bird = NewBird(birdSize*2, Height/2)
-
+	g.Score = 0
+	g.Over = false
 	g.Pipes = make([]*Pipe, 100)
 	initialOffset := horizontalGap + birdSize*2*2
 	offset := initialOffset
@@ -36,6 +37,9 @@ func (g *Game) Init() {
 
 func (g *Game) Update() {
 	if g.Over {
+		if rl.IsKeyPressed(rl.KeySpace) {
+			g.Init()
+		}
 		return
 	}
 
