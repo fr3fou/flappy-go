@@ -13,8 +13,16 @@ func main() {
 
 	rl.SetTargetFPS(60)
 
+	hasStarted := false
 	for !rl.WindowShouldClose() {
-		g.Update()
+		if hasStarted {
+			g.Update()
+		}
 		g.Draw()
+
+		if !hasStarted && rl.IsKeyPressed(rl.KeySpace) {
+			hasStarted = true
+			continue
+		}
 	}
 }
