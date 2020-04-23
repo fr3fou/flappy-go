@@ -7,6 +7,7 @@ import (
 // Pipe is a pipe
 type Pipe struct {
 	rl.Rectangle
+	HasPassedThrough bool
 }
 
 const (
@@ -69,4 +70,22 @@ func (p *Pipe) CollidesWith(other rl.Rectangle) bool {
 	)
 
 	return rl.CheckCollisionRecs(top, other) || rl.CheckCollisionRecs(bottom, other)
+}
+
+func (p *Pipe) IsAround(other rl.Rectangle) bool {
+	if p.HasPassedThrough {
+		return false
+	}
+
+	middle := rl.NewRectangle(
+		p.X-pipeBorder, p.Y+p.Height+pipeBorder,
+		p.Width,
+		verticalGap,
+	)
+
+	if rl.CheckCollisionRecs(middle, other) {
+		p.HasPassedThrough = true
+	}
+
+	return p.HasPassedThrough
 }

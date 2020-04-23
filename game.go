@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strconv"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -8,6 +10,7 @@ import (
 type Game struct {
 	Bird   *Bird
 	Ground *Ground
+	Score  int
 	Over   bool
 	Pipes  []*Pipe
 }
@@ -41,6 +44,10 @@ func (g *Game) Update() {
 	}
 
 	for i := range g.Pipes {
+		if g.Pipes[i].IsAround(g.Bird.Rectangle) {
+			g.Score++
+		}
+
 		if g.Pipes[i].CollidesWith(g.Bird.Rectangle) {
 			g.Over = true
 			break
@@ -69,8 +76,11 @@ func (g *Game) Draw() {
 	g.Ground.Draw()
 
 	if g.Over {
-		rl.DrawText("GAME OVER!", Width/2-150, Height/2-55, 55, rl.White)
+		rl.DrawText("GAME OVER!", Width/2-rl.MeasureText("GAME OVER!", 55)/2, Height/2-55, 55, rl.White)
 	}
+
+	scoreString := strconv.Itoa(g.Score)
+	rl.DrawText(scoreString, Width/2-rl.MeasureText(scoreString, 55)/2, Height/2-150, 55, rl.White)
 
 	rl.EndDrawing()
 }
