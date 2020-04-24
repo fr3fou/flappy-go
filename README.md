@@ -1,5 +1,7 @@
 # flappy-go
 
+![screenshot](./screenshot.png)
+
 ## TODO
 
 - [x] Fix bottom pipes not having colission
