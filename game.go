@@ -6,6 +6,8 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+const maxPipes = 100
+
 // Game is a game
 type Game struct {
 	Bird   *Bird
@@ -23,10 +25,10 @@ func NewGame() *Game {
 
 func (g *Game) Init() {
 	g.Ground = NewGround()
-	g.Bird = NewBird(birdSize*2, Height/2)
+	g.Bird = NewBird(birdSize*2, height/2)
 	g.Score = 0
 	g.Over = false
-	g.Pipes = make([]*Pipe, 100)
+	g.Pipes = make([]*Pipe, maxPipes)
 	initialOffset := horizontalGap + birdSize*2*2
 	offset := initialOffset
 	for i := range g.Pipes {
@@ -56,7 +58,12 @@ func (g *Game) Update() {
 			g.Over = true
 			break
 		}
+
 		g.Pipes[i].X -= speed
+	}
+
+	// Remove first pipe if it's offscreen
+	if g.Pipes[0].IsOffscreen() {
 	}
 
 	if g.Ground.CollidesWith(g.Bird.Rectangle) {
@@ -80,11 +87,11 @@ func (g *Game) Draw() {
 	g.Ground.Draw()
 
 	if g.Over {
-		rl.DrawText("GAME OVER!", Width/2-rl.MeasureText("GAME OVER!", 55)/2, Height/2-55, 55, rl.White)
+		rl.DrawText("GAME OVER!", width/2-rl.MeasureText("GAME OVER!", 55)/2, height/2-55, 55, rl.White)
 	}
 
 	scoreString := strconv.Itoa(g.Score)
-	rl.DrawText(scoreString, Width/2-rl.MeasureText(scoreString, 55)/2, Height/2-150, 55, rl.White)
+	rl.DrawText(scoreString, width/2-rl.MeasureText(scoreString, 55)/2, height/2-150, 55, rl.White)
 
 	rl.EndDrawing()
 }

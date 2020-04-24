@@ -4,7 +4,7 @@
 
 - [x] Fix bottom pipes not having colission
 - [x] Ground Colission detection
-- [ ] Render pipes on demand / delete not visible pipes (right now it's hardcoded to 100)
+- [x] ~~Render pipes on demand~~ / Delete not visible pipes
 - [ ] Sprites for bird, pipes and ground
 - [x] Scoring
 - [ ] AI
