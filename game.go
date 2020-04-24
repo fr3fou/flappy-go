@@ -64,6 +64,7 @@ func (g *Game) Update() {
 
 	// Remove first pipe if it's offscreen
 	if g.Pipes[0].IsOffscreen() {
+		g.Pipes = g.Pipes[1:]
 	}
 
 	if g.Ground.CollidesWith(g.Bird.Rectangle) {
