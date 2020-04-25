@@ -30,12 +30,19 @@ func (b *Bird) Update() {
 }
 
 func (b *Bird) ShouldJump(pipe *flappy.Pipe) bool {
-	alpha := float64(b.Y)
-	beta := math.Abs(float64(b.X - pipe.X))
-	gamma := math.Abs(float64(b.Y - pipe.Height + flappy.PipeBorder))
-	delta := math.Abs(float64(b.Y - flappy.Height - pipe.Height + flappy.PipeBorder))
+	// don't ask why i used greek letters as inputs
+	// it looks fancier
+	// it looks better than x1, x2, x3, x4
+	// idk
+	// explanation of the variables here
+	// https://cdn.discordapp.com/attachments/361910177961738244/703687897886228600/JPEG_20200425_222426.jpg
+	alpha := float64(b.Y) / flappy.Height
+	beta := math.Abs(float64(b.X-pipe.X)) / flappy.Width
+	gamma := math.Abs(float64(b.Y-pipe.Height+flappy.PipeBorder)) / flappy.Height
+	delta := math.Abs(float64(b.Y-flappy.Height-pipe.Height+flappy.PipeBorder)) / flappy.Height
+	epsilon := float64(b.Velocity / flappy.MaxVelocity)
 
-	inputs := []float64{alpha, beta, gamma, delta}
+	inputs := []float64{alpha, beta, gamma, delta, epsilon}
 	outputs := b.Brain.Predict(inputs)
 
 	return outputs[0] > outputs[1]

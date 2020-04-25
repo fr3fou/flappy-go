@@ -8,7 +8,7 @@ import (
 
 func main() {
 	rl.InitWindow(flappy.Width, flappy.Height, "Flappy Bird!")
-	g := ai.NewGame(500, 0.1, 0.5)
+	g := ai.NewGame(500, 0.1, 0.50)
 
 	rl.SetTargetFPS(60)
 

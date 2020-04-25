@@ -20,7 +20,7 @@ type Game struct {
 
 var BrainLayers = []gone.Layer{
 	{
-		Nodes:     4,
+		Nodes:     5,
 		Activator: gone.Sigmoid(),
 	},
 	{
@@ -175,7 +175,6 @@ func (g *Game) Update() {
 			log.Println(err)
 		}
 	}
-
 }
 
 func (g *Game) Draw() {

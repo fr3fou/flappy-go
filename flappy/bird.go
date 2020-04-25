@@ -9,9 +9,10 @@ type Bird struct {
 }
 
 const (
-	BirdSize = 30
-	Gravity  = 0.35
-	Jump     = 6.9
+	BirdSize    = 30
+	Gravity     = 0.35
+	Jump        = 6.9
+	MaxVelocity = 9
 )
 
 func NewBird(x, y int) *Bird {
@@ -26,7 +27,7 @@ func (bird *Bird) Draw(color rl.Color) {
 }
 
 func (bird *Bird) Update() {
-	if bird.Velocity < 9 {
+	if bird.Velocity < MaxVelocity {
 		bird.Velocity += Gravity
 	}
 
