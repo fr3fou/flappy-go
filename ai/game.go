@@ -1,7 +1,9 @@
 package ai
 
 import (
+	"fmt"
 	"log"
+	"math"
 	"math/rand"
 
 	"github.com/fr3fou/flappy-go/flappy"
@@ -24,12 +26,12 @@ var BrainLayers = []gone.Layer{
 		Activator: gone.Sigmoid(),
 	},
 	{
-		Nodes:     6,
+		Nodes:     8,
 		Activator: gone.Sigmoid(),
 	},
 	{
 		Nodes:     2,
-		Activator: gone.Sigmoid(),
+		Activator: gone.Sigmoid(), // ideally should be softmax
 	},
 }
 
@@ -56,11 +58,10 @@ func NewGame(populationAmount int, mutationRate, crossoverOdds float64) *Game {
 
 func (g *Game) Init() {
 	g.Ground = flappy.NewGround()
-	g.Pipes = make([]*flappy.Pipe, flappy.MaxPipes)
 
+	g.Pipes = make([]*flappy.Pipe, flappy.MaxPipes)
 	initialOffset := flappy.HorizontalGap + flappy.BirdSize*2*2
 	offset := initialOffset
-
 	for i := range g.Pipes {
 		g.Pipes[i] = flappy.NewPipe((i)*flappy.PipeWidth+offset, 0)
 		offset = flappy.HorizontalGap*(i+1) + initialOffset
@@ -71,41 +72,43 @@ func (g *Game) NextGeneration() error {
 	g.Generation++
 	log.Printf("Generation Number %d...", g.Generation)
 
+	// penalize worse scores
+	// reward higher scores
+	for _, bird := range g.Birds {
+		bird.Score = int(math.Pow(float64(bird.Score), 2))
+	}
+
 	// Normalize fitness
 	sum := 0.0
 	for _, bird := range g.Birds {
 		sum += float64(bird.Score)
 	}
 
-	for _, bird := range g.Birds {
+	for i, bird := range g.Birds {
 		bird.Fitness = float64(bird.Score) / sum
+		fmt.Println(i, bird.Fitness)
 	}
 
 	newBirds := make([]*Bird, g.PopulationAmount)
-
 	// Make the new population
 	for i := 0; i < g.PopulationAmount; i++ {
 		// Should we do crossover or a bare copy of the best one
 		if rand.Float64() > g.CrossoverOdds {
 			child := g.NaturalSelection()
-
-			child.Brain.Mutate(gone.GaussianMutation(g.MutationRate))
-
+			child.Brain.Mutate(gone.GaussianMutation(g.MutationRate, 1, 0))
 			newBirds[i] = child
 		} else {
 			firstParent := g.NaturalSelection()
 			secondParent := g.NaturalSelection()
-
 			childBrain, err := firstParent.Brain.Crossover(secondParent.Brain)
 			if err != nil {
 				return err
 			}
-
+			childBrain.Mutate(gone.GaussianMutation(g.MutationRate, 1, 0))
 			child := NewBird(flappy.BirdSize*2, flappy.Height/2, childBrain)
 			newBirds[i] = child
 		}
 	}
-
 	g.Birds = newBirds
 
 	return nil
@@ -121,20 +124,21 @@ func (g *Game) NaturalSelection() *Bird {
 	}
 	i--
 	bird := g.Birds[i]
-	brainCopy := bird.Brain.Copy()
-	return NewBird(flappy.BirdSize*2, flappy.Height/2, brainCopy)
+	return NewBird(flappy.BirdSize*2, flappy.Height/2, bird.Brain.Copy())
 }
 
 func (g *Game) Update() {
-	firstPipe := g.Pipes[0]
-
 	for _, pipe := range g.Pipes {
 		pipe.X -= flappy.Speed
 	}
 
 	for _, bird := range g.Birds {
+		if !bird.Alive {
+			continue
+		}
+
 		for _, pipe := range g.Pipes {
-			if pipe.IsAround(pipe.Rectangle) {
+			if pipe.IsAround(bird.Rectangle) {
 				bird.Score++
 			}
 
@@ -147,8 +151,20 @@ func (g *Game) Update() {
 		if g.Ground.CollidesWith(bird.Rectangle) || bird.AboveSky() {
 			bird.Alive = false
 		}
+	}
 
-		if bird.ShouldJump(firstPipe) {
+	for _, bird := range g.Birds {
+		if !bird.Alive {
+			continue
+		}
+
+		// the next pipe is the closest one if the closestPipe is behind the bird
+		closestPipe := g.Pipes[0]
+		if g.Pipes[1].X < bird.X {
+			closestPipe = g.Pipes[1]
+		}
+
+		if bird.ShouldJump(closestPipe) {
 			bird.Jump()
 		}
 
@@ -156,19 +172,19 @@ func (g *Game) Update() {
 	}
 
 	// Remove first pipe if it's offscreen
-	if firstPipe.IsOffscreen() {
+	if g.Pipes[0].IsOffscreen() {
 		g.Pipes = g.Pipes[1:]
 	}
 
-	hasAlive := false
+	allDead := true
 	for _, bird := range g.Birds {
 		if bird.Alive {
-			hasAlive = true
+			allDead = false
 			break
 		}
 	}
 
-	if !hasAlive {
+	if allDead {
 		g.Init()
 		err := g.NextGeneration()
 		if err != nil {
