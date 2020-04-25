@@ -1,4 +1,4 @@
-package main
+package flappy
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
@@ -25,12 +25,12 @@ func (bird *Bird) Draw() {
 	rl.DrawRectangleRec(bird.Rectangle, rl.Yellow)
 }
 
-func (b *Bird) Update() {
-	if b.Velocity < 9 {
-		b.Velocity += gravity
+func (bird *Bird) Update() {
+	if bird.Velocity < 9 {
+		bird.Velocity += gravity
 	}
 
-	b.Y += b.Velocity
+	bird.Y += bird.Velocity
 }
 
 func (b *Bird) Jump() {

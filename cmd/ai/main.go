@@ -1,15 +1,13 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
-
-const (
-	width  = 800
-	height = 900
+import (
+	"github.com/fr3fou/flappy-go/flappy"
+	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 func main() {
-	rl.InitWindow(width, height, "Flappy Bird!")
-	g := NewGame()
+	rl.InitWindow(flappy.Width, flappy.Height, "Flappy Bird!")
+	g := flappy.NewGame()
 
 	rl.SetTargetFPS(60)
 
