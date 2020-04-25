@@ -82,7 +82,7 @@ func (g *Game) Draw() {
 	rl.BeginDrawing()
 	rl.ClearBackground(rl.SkyBlue)
 
-	g.Bird.Draw()
+	g.Bird.Draw(rl.Yellow)
 
 	for _, pipe := range g.Pipes {
 		pipe.Draw()

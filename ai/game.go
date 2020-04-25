@@ -81,7 +81,7 @@ func (g *Game) NextGeneration() error {
 		bird.Fitness = float64(bird.Score) / sum
 	}
 
-	newPopulation := make([]*Bird, g.PopulationAmount)
+	newBirds := make([]*Bird, g.PopulationAmount)
 
 	// Make the new population
 	for i := 0; i < g.PopulationAmount; i++ {
@@ -91,7 +91,7 @@ func (g *Game) NextGeneration() error {
 
 			child.Brain.Mutate(gone.GaussianMutation(g.MutationRate))
 
-			newPopulation[i] = child
+			newBirds[i] = child
 		} else {
 			firstParent := g.NaturalSelection()
 			secondParent := g.NaturalSelection()
@@ -102,11 +102,11 @@ func (g *Game) NextGeneration() error {
 			}
 
 			child := NewBird(flappy.BirdSize*2, flappy.Height/2, childBrain)
-			newPopulation[i] = child
+			newBirds[i] = child
 		}
 	}
 
-	g.Birds = newPopulation
+	g.Birds = newBirds
 
 	return nil
 }
@@ -128,30 +128,31 @@ func (g *Game) NaturalSelection() *Bird {
 func (g *Game) Update() {
 	firstPipe := g.Pipes[0]
 
-	for _, bird := range g.Birds {
-		for _, pipe := range g.Pipes {
-			if pipe.IsAround(bird.Rectangle) {
-				bird.Score++
+	for _, pipe := range g.Pipes {
+		pipe.X -= flappy.Speed
+	}
+
+	for i := range g.Birds {
+		for j := range g.Pipes {
+			if g.Pipes[j].IsAround(g.Birds[i].Rectangle) {
+				g.Birds[i].Score++
 			}
 
-			if pipe.CollidesWith(bird.Rectangle) {
-				bird.Alive = false
+			if g.Pipes[j].CollidesWith(g.Birds[i].Rectangle) {
+				g.Birds[i].Alive = false
 				break
 			}
-
-			pipe.X -= flappy.Speed
 		}
 
-		if g.Ground.CollidesWith(bird.Rectangle) || bird.AboveSky() {
-			bird.Alive = false
-			break
+		if g.Ground.CollidesWith(g.Birds[i].Rectangle) || g.Birds[i].AboveSky() {
+			g.Birds[i].Alive = false
 		}
 
-		if bird.ShouldJump(firstPipe) {
-			bird.Jump()
+		if g.Birds[i].ShouldJump(firstPipe) {
+			g.Birds[i].Jump()
 		}
 
-		bird.Update()
+		g.Birds[i].Update()
 	}
 
 	// Remove first pipe if it's offscreen
@@ -183,7 +184,7 @@ func (g *Game) Draw() {
 
 	for _, bird := range g.Birds {
 		if bird.Alive {
-			bird.Draw()
+			bird.Draw(100)
 		}
 	}
 

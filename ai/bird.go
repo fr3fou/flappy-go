@@ -5,12 +5,12 @@ import (
 
 	"github.com/fr3fou/flappy-go/flappy"
 	"github.com/fr3fou/gone/gone"
+	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Bird struct {
 	flappy.Bird
-	Brain *gone.NeuralNetwork
-	// Inputs to the brain
+	Brain   *gone.NeuralNetwork
 	Score   int
 	Fitness float64
 	Alive   bool
@@ -39,4 +39,12 @@ func (b *Bird) ShouldJump(pipe *flappy.Pipe) bool {
 	outputs := b.Brain.Predict(inputs)
 
 	return outputs[0] > outputs[1]
+}
+
+func (b *Bird) Draw(opacity uint8) {
+	if b.Alive {
+		b.Bird.Draw(rl.NewColor(rl.Yellow.R, rl.Yellow.G, rl.Yellow.B, opacity))
+	} else {
+		b.Bird.Draw(rl.NewColor(rl.Red.R, rl.Red.G, rl.Red.B, opacity))
+	}
 }

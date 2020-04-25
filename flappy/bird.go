@@ -21,8 +21,8 @@ func NewBird(x, y int) *Bird {
 	}
 }
 
-func (bird *Bird) Draw() {
-	rl.DrawRectangleRec(bird.Rectangle, rl.Yellow)
+func (bird *Bird) Draw(color rl.Color) {
+	rl.DrawRectangleRec(bird.Rectangle, color)
 }
 
 func (bird *Bird) Update() {
