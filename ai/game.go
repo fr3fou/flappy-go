@@ -132,27 +132,27 @@ func (g *Game) Update() {
 		pipe.X -= flappy.Speed
 	}
 
-	for i := range g.Birds {
-		for j := range g.Pipes {
-			if g.Pipes[j].IsAround(g.Birds[i].Rectangle) {
-				g.Birds[i].Score++
+	for _, bird := range g.Birds {
+		for _, pipe := range g.Pipes {
+			if pipe.IsAround(pipe.Rectangle) {
+				bird.Score++
 			}
 
-			if g.Pipes[j].CollidesWith(g.Birds[i].Rectangle) {
-				g.Birds[i].Alive = false
+			if pipe.CollidesWith(bird.Rectangle) {
+				bird.Alive = false
 				break
 			}
 		}
 
-		if g.Ground.CollidesWith(g.Birds[i].Rectangle) || g.Birds[i].AboveSky() {
-			g.Birds[i].Alive = false
+		if g.Ground.CollidesWith(bird.Rectangle) || bird.AboveSky() {
+			bird.Alive = false
 		}
 
-		if g.Birds[i].ShouldJump(firstPipe) {
-			g.Birds[i].Jump()
+		if bird.ShouldJump(firstPipe) {
+			bird.Jump()
 		}
 
-		g.Birds[i].Update()
+		bird.Update()
 	}
 
 	// Remove first pipe if it's offscreen
