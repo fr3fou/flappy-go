@@ -8,14 +8,14 @@ type Ground struct {
 }
 
 const (
-	groundHeight = 100
-	grassHeight  = 5
+	GroundHeight = 100
+	GrassHeight  = 5
 )
 
 // NewGround is a ctor for ground
 func NewGround() *Ground {
 	return &Ground{
-		Rectangle: rl.NewRectangle(0, Height-groundHeight, Width, groundHeight),
+		Rectangle: rl.NewRectangle(0, Height-GroundHeight, Width, GroundHeight),
 	}
 }
 
@@ -26,7 +26,7 @@ func (ground *Ground) Draw() {
 	rl.DrawRectangle(g.X, g.Y, g.Width, g.Height, rl.Brown)
 
 	// Grass
-	rl.DrawRectangle(g.X, g.Y, Width, grassHeight, rl.DarkGreen)
+	rl.DrawRectangle(g.X, g.Y, Width, GrassHeight, rl.DarkGreen)
 }
 
 func (ground *Ground) CollidesWith(other rl.Rectangle) bool {

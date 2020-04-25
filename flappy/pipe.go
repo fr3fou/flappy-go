@@ -11,19 +11,19 @@ type Pipe struct {
 }
 
 const (
-	pipeWidth     = 70
-	pipeHeight    = Height / 2
-	pipeBorder    = 3
-	verticalGap   = 120
-	horizontalGap = 230
-	speed         = 2.3
+	PipeWidth     = 70
+	PipeHeight    = Height / 2
+	PipeBorder    = 3
+	VerticalGap   = 120
+	HorizontalGap = 230
+	Speed         = 2.3
 )
 
 func NewPipe(x, y int) *Pipe {
 	return &Pipe{
 		Rectangle: rl.NewRectangle(
 			float32(x), float32(y),
-			pipeWidth, float32(rl.GetRandomValue(verticalGap, pipeHeight)),
+			PipeWidth, float32(rl.GetRandomValue(VerticalGap, PipeHeight)),
 		),
 	}
 }
@@ -34,10 +34,10 @@ func (pipe *Pipe) Draw() {
 
 	// Top Pipe Border
 	bTop := rl.NewRectangle(
-		pipe.X-pipeBorder, pipe.Y,
-		pipe.Width+pipeBorder*2, pipe.Height+pipeBorder,
+		pipe.X-PipeBorder, pipe.Y,
+		pipe.Width+PipeBorder*2, pipe.Height+PipeBorder,
 	)
-	rl.DrawRectangleLinesEx(bTop, pipeBorder, rl.DarkGray)
+	rl.DrawRectangleLinesEx(bTop, PipeBorder, rl.DarkGray)
 
 	// Top Pipe
 	gTop := pipe.Rectangle
@@ -45,14 +45,14 @@ func (pipe *Pipe) Draw() {
 
 	// Bottom Pipe Border
 	bBottom := rl.NewRectangle(
-		pipe.X-pipeBorder, pipe.Y+verticalGap+pipe.Height-pipeBorder,
-		pipe.Width+pipeBorder*2, Height-pipe.Height+pipeBorder,
+		pipe.X-PipeBorder, pipe.Y+VerticalGap+pipe.Height-PipeBorder,
+		pipe.Width+PipeBorder*2, Height-pipe.Height+PipeBorder,
 	)
-	rl.DrawRectangleLinesEx(bBottom, pipeBorder, rl.DarkGray)
+	rl.DrawRectangleLinesEx(bBottom, PipeBorder, rl.DarkGray)
 
 	// Bottom Pipe
 	gBottom := rl.NewRectangle(
-		pipe.X, float32(pipe.Y+verticalGap+pipe.Height),
+		pipe.X, float32(pipe.Y+VerticalGap+pipe.Height),
 		pipe.Width, float32(Height-p.Height),
 	)
 	rl.DrawRectangleGradientEx(gBottom, rl.Lime, rl.Lime, rl.Green, rl.Green)
@@ -60,13 +60,13 @@ func (pipe *Pipe) Draw() {
 
 func (p *Pipe) CollidesWith(other rl.Rectangle) bool {
 	top := rl.NewRectangle(
-		p.X-pipeBorder, p.Y,
-		p.Width+pipeBorder*2, p.Height+pipeBorder,
+		p.X-PipeBorder, p.Y,
+		p.Width+PipeBorder*2, p.Height+PipeBorder,
 	)
 
 	bottom := rl.NewRectangle(
-		p.X-pipeBorder, p.Y+verticalGap+p.Height-pipeBorder,
-		p.Width+pipeBorder*2, Height-p.Height+pipeBorder,
+		p.X-PipeBorder, p.Y+VerticalGap+p.Height-PipeBorder,
+		p.Width+PipeBorder*2, Height-p.Height+PipeBorder,
 	)
 
 	return rl.CheckCollisionRecs(top, other) || rl.CheckCollisionRecs(bottom, other)
@@ -78,9 +78,9 @@ func (p *Pipe) IsAround(other rl.Rectangle) bool {
 	}
 
 	middle := rl.NewRectangle(
-		p.X-pipeBorder, p.Y+p.Height+pipeBorder,
+		p.X-PipeBorder, p.Y+p.Height+PipeBorder,
 		p.Width,
-		verticalGap,
+		VerticalGap,
 	)
 
 	if rl.CheckCollisionRecs(middle, other) {
@@ -91,5 +91,5 @@ func (p *Pipe) IsAround(other rl.Rectangle) bool {
 }
 
 func (p *Pipe) IsOffscreen() bool {
-	return p.X+p.Width+pipeBorder <= 0
+	return p.X+p.Width+PipeBorder <= 0
 }

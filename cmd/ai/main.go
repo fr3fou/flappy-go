@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/fr3fou/flappy-go/ai"
 	"github.com/fr3fou/flappy-go/flappy"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 func main() {
 	rl.InitWindow(flappy.Width, flappy.Height, "Flappy Bird!")
-	g := flappy.NewGame()
+	g := ai.NewGame(59, 0.1, 0.5)
 
 	rl.SetTargetFPS(60)
 

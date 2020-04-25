@@ -9,14 +9,14 @@ type Bird struct {
 }
 
 const (
-	birdSize = 30
-	gravity  = 0.35
-	jump     = 6.9
+	BirdSize = 30
+	Gravity  = 0.35
+	Jump     = 6.9
 )
 
 func NewBird(x, y int) *Bird {
 	return &Bird{
-		Rectangle: rl.NewRectangle(float32(x), float32(y), birdSize, birdSize),
+		Rectangle: rl.NewRectangle(float32(x), float32(y), BirdSize, BirdSize),
 		Velocity:  1,
 	}
 }
@@ -27,12 +27,16 @@ func (bird *Bird) Draw() {
 
 func (bird *Bird) Update() {
 	if bird.Velocity < 9 {
-		bird.Velocity += gravity
+		bird.Velocity += Gravity
 	}
 
 	bird.Y += bird.Velocity
 }
 
 func (b *Bird) Jump() {
-	b.Velocity = -jump
+	b.Velocity = -Jump
+}
+
+func (b *Bird) AboveSky() bool {
+	return b.Y < 0
 }

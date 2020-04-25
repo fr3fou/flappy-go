@@ -10,3 +10,7 @@
 - [ ] Sprites for bird, pipes and ground
 - [x] Scoring
 - [ ] AI
+
+## Resources
+
+- <https://stackoverflow.com/questions/14011844/choosing-parents-to-crossover-in-genetic-algorithms>
