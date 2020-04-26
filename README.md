@@ -6,10 +6,10 @@
 
 - [x] Fix bottom pipes not having colission
 - [x] Ground Colission detection
-- [x] ~~Render pipes on demand~~ / Delete not visible pipes
+- [x] Render pipes on demand / Delete not visible pipes
 - [ ] Sprites for bird, pipes and ground
 - [x] Scoring
-- [ ] AI
+- [x] AI
 
 ## Resources
 

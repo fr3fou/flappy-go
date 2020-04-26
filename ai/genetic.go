@@ -22,12 +22,13 @@ func (g *Game) NextGeneration() error {
 		sum += float64(score)
 	}
 
+	// Maybe there's a better way?
 	for _, bird := range g.Birds {
 		bird.Fitness = float64(bird.Score) / sum
 	}
 
-	newBirds := make([]*Bird, g.PopulationAmount)
 	// Make the new population
+	newBirds := make([]*Bird, g.PopulationAmount)
 	for i := 0; i < g.PopulationAmount; i++ {
 		// Determine whether to do crossover or a copy of the best one
 		var child *Bird

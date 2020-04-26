@@ -11,7 +11,7 @@ const (
 	Height = 900
 )
 
-const MaxPipes = 100
+const PipesBuffer = 3
 
 // Game is a game
 type Game struct {
@@ -31,7 +31,7 @@ func (g *Game) Init() {
 	g.Bird = NewBird(BirdSize*2, Height/2)
 	g.Score = 0
 	g.Over = false
-	g.Pipes = make([]*Pipe, MaxPipes)
+	g.Pipes = make([]*Pipe, PipesBuffer)
 	initialOffset := HorizontalGap + BirdSize*2*2
 	offset := initialOffset
 	for i := range g.Pipes {
@@ -65,9 +65,10 @@ func (g *Game) Update() {
 		g.Pipes[i].X -= Speed
 	}
 
-	// Remove first pipe if it's offscreen
 	if g.Pipes[0].IsOffscreen() {
+		newPipeX := int(g.Pipes[len(g.Pipes)-1].ToInt32().X + HorizontalGap + PipeWidth)
 		g.Pipes = g.Pipes[1:]
+		g.Pipes = append(g.Pipes, NewPipe(newPipeX, 0))
 	}
 
 	if g.Ground.CollidesWith(g.Bird.Rectangle) || g.Bird.AboveSky() {

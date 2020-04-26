@@ -57,7 +57,7 @@ func New(populationAmount int, mutationRate, crossoverOdds float64) *Game {
 func (g *Game) Init() {
 	g.Ground = flappy.NewGround()
 
-	g.Pipes = make([]*flappy.Pipe, flappy.MaxPipes)
+	g.Pipes = make([]*flappy.Pipe, flappy.PipesBuffer)
 	initialOffset := flappy.HorizontalGap + flappy.BirdSize*2*2
 	offset := initialOffset
 	for i := range g.Pipes {
@@ -106,9 +106,10 @@ func (g *Game) Update() {
 		bird.Update()
 	}
 
-	// Remove first pipe if it's offscreen
 	if g.Pipes[0].IsOffscreen() {
+		newPipeX := int(g.Pipes[len(g.Pipes)-1].ToInt32().X + flappy.HorizontalGap + flappy.PipeWidth)
 		g.Pipes = g.Pipes[1:]
+		g.Pipes = append(g.Pipes, flappy.NewPipe(newPipeX, 0))
 	}
 
 	allDead := true
