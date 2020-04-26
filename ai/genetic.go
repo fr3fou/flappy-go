@@ -15,14 +15,11 @@ func (g *Game) NextGeneration() error {
 
 	// penalize worse scores
 	// reward higher scores
-	for _, bird := range g.Birds {
-		bird.Score = int(math.Pow(float64(bird.Score), 2))
-	}
-
-	// Normalize fitness
 	sum := 0.0
 	for _, bird := range g.Birds {
-		sum += float64(bird.Score)
+		score := int(math.Pow(float64(bird.Score), 2))
+		bird.Score = score
+		sum += float64(score)
 	}
 
 	for _, bird := range g.Birds {
@@ -32,22 +29,26 @@ func (g *Game) NextGeneration() error {
 	newBirds := make([]*Bird, g.PopulationAmount)
 	// Make the new population
 	for i := 0; i < g.PopulationAmount; i++ {
-		// Should we do crossover or a bare copy of the best one
+		// Determine whether to do crossover or a copy of the best one
+		var child *Bird
 		if rand.Float64() > g.CrossoverOdds {
-			child := g.NaturalSelection()
-			child.Brain.Mutate(gone.GaussianMutation(g.MutationRate, 1, 0))
-			newBirds[i] = child
+			child = g.NaturalSelection()
 		} else {
 			firstParent := g.NaturalSelection()
 			secondParent := g.NaturalSelection()
+
 			childBrain, err := firstParent.Brain.Crossover(secondParent.Brain)
 			if err != nil {
 				return err
 			}
-			childBrain.Mutate(gone.GaussianMutation(g.MutationRate, 1, 0))
-			child := NewBird(flappy.BirdSize*2, flappy.Height/2, childBrain)
-			newBirds[i] = child
+
+			child = NewBird(flappy.BirdSize*2, flappy.Height/2, childBrain)
 		}
+
+		child.Brain.Mutate(
+			gone.GaussianMutation(g.MutationRate, 1, 0),
+		)
+		newBirds[i] = child
 	}
 	g.Birds = newBirds
 

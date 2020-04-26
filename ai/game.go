@@ -32,7 +32,8 @@ var BrainLayers = []gone.Layer{
 	},
 }
 
-func NewGame(populationAmount int, mutationRate, crossoverOdds float64) *Game {
+// New creates an AI simulation
+func New(populationAmount int, mutationRate, crossoverOdds float64) *Game {
 	birds := make([]*Bird, populationAmount)
 
 	// Initialize population
